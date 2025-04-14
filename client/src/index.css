@@ -12,53 +12,60 @@
   }
 }
 
-/* Custom styles for timeline components */
-.phase-bar {
-  background-image: linear-gradient(to right, var(--tw-gradient-stops));
-  cursor: pointer; /* Indicate clickable items */
+@layer components {
+  /* Timeline container */
+  .timeline-container {
+    @apply relative pb-12;
+  }
+
+  /* Timeline vertical line */
+  .timeline-line {
+    @apply absolute top-0 bottom-0 left-1/2 w-1 bg-primary/20 transform -translate-x-1/2;
+  }
+
+  /* Phase cards */
+  .phase-card {
+    @apply relative my-12 mx-auto w-full max-w-md p-6 rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl border border-border;
+  }
+
+  /* Left positioned phase */
+  .phase-card-left {
+    @apply md:ml-0 md:mr-auto md:pr-12 md:pl-6 md:w-[calc(50%-20px)];
+  }
+
+  /* Right positioned phase */
+  .phase-card-right {
+    @apply md:mr-0 md:ml-auto md:pl-12 md:pr-6 md:w-[calc(50%-20px)];
+  }
+
+  /* Phase dot on timeline */
+  .phase-dot {
+    @apply hidden md:block absolute top-1/2 left-1/2 w-6 h-6 rounded-full transform -translate-x-1/2 -translate-y-1/2 border-2 border-background z-10;
+  }
+
+  /* Phase card connector */
+  .phase-connector {
+    @apply hidden md:block absolute top-1/2 w-[20px] h-0.5 transform -translate-y-1/2;
+  }
+
+  /* Left connector */
+  .connector-left {
+    @apply right-0 mr-[-20px];
+  }
+
+  /* Right connector */
+  .connector-right {
+    @apply left-0 ml-[-20px];
+  }
+
+  /* Modal links */
+  .modal-link {
+    @apply text-primary underline font-medium transition-colors hover:text-primary/80;
+  }
 }
 
-/* Modal styles */
-.modal-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black */
-  z-index: 40; /* Below modal, above content */
-  transition: opacity 0.3s ease-in-out; /* Smooth transition */
-}
-
-.modal-content {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 50; /* Above backdrop */
-  max-height: 80vh; /* Limit height and allow scrolling */
-  overflow-y: auto; /* Enable vertical scroll if content overflows */
-  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out; /* Smooth transition */
-}
-
-/* Hide initially - Using opacity and pointer-events for smoother transitions */
-.hidden {
-  opacity: 0;
-  pointer-events: none; /* Prevent interaction when hidden */
-}
-
-.visible {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-/* Style links within modal */
-.modal-link {
-  color: #2563eb; /* Blue-600 */
-  text-decoration: underline;
-  font-weight: 500;
-}
-
-.modal-link:hover {
-  color: #1d4ed8; /* Blue-700 */
+/* Header gradient for cards */
+.card-header-gradient {
+  @apply relative overflow-hidden rounded-t-md p-4 -mx-6 -mt-6 mb-4 flex flex-col justify-between min-h-[100px];
+  background-image: linear-gradient(45deg, var(--tw-gradient-stops));
 }

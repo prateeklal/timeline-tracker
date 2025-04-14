@@ -3,7 +3,7 @@ import DevOpsTimelineContainer from '@/components/DevOpsTimeline';
 
 const DevOpsTimeline: React.FC = () => {
   return (
-    <div className="bg-gray-100 min-h-screen">
+    <div className="min-h-screen">
       <DevOpsTimelineContainer />
     </div>
   );
