@@ -1,18 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TimelinePhase from './TimelinePhase';
 import PhaseModal from './PhaseModal';
-import phases, { Phase } from '@/data/phases';
+import { Phase, VideoResource } from '@/data/phases';
 import { motion } from 'framer-motion';
-import { RocketIcon, Sparkles } from 'lucide-react';
+import { Sparkles, AlertTriangle } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { fetchAllPhases, fetchPhaseWithVideos, PhaseWithVideos } from '@/lib/api';
 
 const Timeline: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPhase, setSelectedPhase] = useState<Phase | null>(null);
+  const [selectedPhaseVideos, setSelectedPhaseVideos] = useState<VideoResource[]>([]);
+
+  // Fetch all phases
+  const {
+    data: phases = [],
+    isLoading,
+    isError
+  } = useQuery({
+    queryKey: ['/api/phases'],
+    queryFn: fetchAllPhases
+  });
+
+  // Fetch selected phase with videos
+  const {
+    data: phaseWithVideos,
+    isLoading: isLoadingPhaseDetails,
+    refetch: refetchPhaseDetails
+  } = useQuery<PhaseWithVideos>({
+    queryKey: ['/api/phases', selectedPhase?.id],
+    queryFn: () => fetchPhaseWithVideos(selectedPhase?.id || 0),
+    enabled: !!selectedPhase,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+
+  // Update selected phase videos when phase details are loaded
+  useEffect(() => {
+    if (phaseWithVideos) {
+      setSelectedPhaseVideos(phaseWithVideos.videos);
+    }
+  }, [phaseWithVideos]);
 
   const handlePhaseClick = (phaseId: number) => {
     const phase = phases.find(p => p.id === phaseId) || null;
     setSelectedPhase(phase);
     setIsModalOpen(true);
+
+    // Trigger a refetch when a new phase is selected
+    if (phase) {
+      refetchPhaseDetails();
+    }
   };
 
   const closeModal = () => {
