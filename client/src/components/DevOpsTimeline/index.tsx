@@ -6,9 +6,9 @@ import { Code, GitBranch, CloudCog, Server, Terminal } from 'lucide-react';
 const DevOpsTimelineContainer: React.FC = () => {
   return (
     <div className="p-4 md:p-8 min-h-screen overflow-hidden">
-      <div className="max-w-6xl mx-auto">
+      <div className="w-full max-w-6xl mx-auto">
         <motion.header 
-          className="mb-12 text-center relative z-10"
+          className="mb-12 text-center relative z-10 w-full"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
