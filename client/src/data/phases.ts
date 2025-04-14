@@ -1,8 +1,10 @@
 export interface VideoResource {
-  id: string;
+  id: number;
+  videoId: string;
   title: string;
   description: string;
   category: string;
+  phaseId: number;
 }
 
 export interface Phase {
