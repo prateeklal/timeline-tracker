@@ -1,6 +1,6 @@
 import express, { Express, Request, Response, NextFunction } from 'express';
 import serverless from 'serverless-http';
-import { users, phases, videoResources } from './shared/schema';
+import { users, phases, videoResources } from '@shared/schema';
 import { Pool, neonConfig } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-serverless';
 import { eq } from 'drizzle-orm';
