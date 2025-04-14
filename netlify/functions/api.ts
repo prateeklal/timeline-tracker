@@ -13,6 +13,17 @@ neonConfig.webSocketConstructor = ws;
 const app = express();
 app.use(express.json());
 
+// Add CORS headers
+app.use((req: Request, res: Response, next: NextFunction) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+  next();
+});
+
 // Database connection
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const db = drizzle({ client: pool, schema: { users, phases, videoResources } });
@@ -20,11 +31,15 @@ const db = drizzle({ client: pool, schema: { users, phases, videoResources } });
 // API Routes
 app.get('/api/phases', async (req: Request, res: Response) => {
   try {
+    console.log('Fetching phases...');
+    console.log('Database URL:', process.env.DATABASE_URL ? 'Set' : 'Not set');
+    
     const allPhases = await db.select().from(phases);
+    console.log('Phases fetched:', allPhases);
     res.json(allPhases);
   } catch (error) {
     console.error('Error fetching phases:', error);
-    res.status(500).json({ error: 'Failed to fetch phases' });
+    res.status(500).json({ error: 'Failed to fetch phases', details: error.message });
   }
 });
 
