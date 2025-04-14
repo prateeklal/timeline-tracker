@@ -1,3 +1,10 @@
+export interface VideoResource {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+}
+
 export interface Phase {
   id: number;
   title: string;
@@ -6,6 +13,7 @@ export interface Phase {
   details: string;
   gradientFrom: string;
   gradientTo: string;
+  videos?: VideoResource[];
 }
 
 const phases: Phase[] = [
@@ -16,6 +24,38 @@ const phases: Phase[] = [
     focus: "DevOps Culture, Linux Fundamentals, Basic Networking, Bash/Python Scripting.",
     gradientFrom: "blue-500",
     gradientTo: "blue-600",
+    videos: [
+      {
+        id: "3c-iBn73dDE",
+        title: "DevOps Explained",
+        description: "This video provides a comprehensive introduction to DevOps concepts, explaining the culture, methodologies, and benefits.",
+        category: "DevOps Culture"
+      },
+      {
+        id: "sWbUDq4S6Y8",
+        title: "Introduction to Linux - Full Course for Beginners",
+        description: "A complete guide to Linux for beginners, covering basic commands, filesystem, and operations.",
+        category: "Linux Fundamentals"
+      },
+      {
+        id: "FGdiSJJWL0c",
+        title: "Computer Networking Course - Network Engineering",
+        description: "Learn the fundamentals of computer networking with this detailed course from FreeCodeCamp.",
+        category: "Networking Concepts"
+      },
+      {
+        id: "SPwyp2NG-bE",
+        title: "Bash Scripting Full Course",
+        description: "A complete tutorial for bash scripting, teaching automation and shell programming.",
+        category: "Bash Scripting"
+      },
+      {
+        id: "x0IXUS9s_sI",
+        title: "Python for DevOps",
+        description: "Learn Python fundamentals for automation and DevOps applications.",
+        category: "Python Scripting"
+      }
+    ],
     details: `
       <ul class="list-disc pl-5 space-y-2">
           <li>
@@ -54,6 +94,38 @@ const phases: Phase[] = [
     focus: "Git Mastery, Docker (Dockerfile, Compose), CI/CD Concepts, Intro to GitHub Actions/GitLab CI/Jenkins.",
     gradientFrom: "green-500",
     gradientTo: "green-600",
+    videos: [
+      {
+        id: "RGOj5yH7evk",
+        title: "Git and GitHub for Beginners - Crash Course",
+        description: "A comprehensive introduction to Git and GitHub, covering all the essential commands and workflows.",
+        category: "Git"
+      },
+      {
+        id: "Wf2eSG3zc9M",
+        title: "Advanced Git Tutorial - Interactive Rebase, Cherry-Picking, Reflog, Submodules and more",
+        description: "Learn advanced Git techniques for effective version control management.",
+        category: "Git"
+      },
+      {
+        id: "pTFZFxd4hOI",
+        title: "Docker Tutorial for Beginners",
+        description: "A complete introduction to Docker concepts, containers, and Docker Compose.",
+        category: "Docker"
+      },
+      {
+        id: "R8_veQiYBjI",
+        title: "CI/CD pipelines explained",
+        description: "This video explains the concepts of Continuous Integration and Continuous Deployment with practical examples.",
+        category: "CI/CD"
+      },
+      {
+        id: "R3WJM6_JiyM",
+        title: "GitHub Actions Tutorial for Beginners",
+        description: "Learn how to create and use GitHub Actions for CI/CD pipelines.",
+        category: "CI/CD Tools"
+      }
+    ],
     details: `
       <ul class="list-disc pl-5 space-y-2">
           <li><strong>Git Mastery:</strong> Branching Strategies (Gitflow, GitHub Flow), Merging vs. Rebasing, Conflict Resolution, Good Commit Messages.
@@ -88,6 +160,38 @@ const phases: Phase[] = [
     focus: "Choose AWS/Azure/GCP. Learn Core Concepts (IAM, Compute, Storage, Basic Networking, CDN, CloudWatch/Monitor).",
     gradientFrom: "purple-500",
     gradientTo: "purple-600",
+    videos: [
+      {
+        id: "ulprqHcWVfk",
+        title: "AWS Basics for Beginners - Full Course",
+        description: "A comprehensive course on AWS fundamentals, covering all core services and concepts.",
+        category: "AWS"
+      },
+      {
+        id: "NKEFWyqJ5XA",
+        title: "Microsoft Azure Fundamentals Certification Course (AZ-900)",
+        description: "Complete Azure fundamentals course covering the essentials of Microsoft's cloud platform.",
+        category: "Azure"
+      },
+      {
+        id: "JtUIQz_EkUw",
+        title: "Google Cloud Platform Full Course",
+        description: "Learn all the fundamentals of Google Cloud Platform services and architecture.",
+        category: "GCP"
+      },
+      {
+        id: "Z3SYDTMP3ME",
+        title: "AWS IAM Tutorial",
+        description: "In-depth guide to Identity and Access Management in AWS, covering users, roles, policies and best practices.",
+        category: "IAM"
+      },
+      {
+        id: "B-7RjqQK-tQ",
+        title: "AWS S3 Storage Tutorial",
+        description: "Complete guide to using AWS S3 for cloud storage with practical examples.",
+        category: "Cloud Storage"
+      }
+    ],
     details: `
       <ul class="list-disc pl-5 space-y-2">
           <li>
@@ -125,6 +229,38 @@ const phases: Phase[] = [
     focus: "IaC Concepts, Terraform, Advanced Pipelines (Environments, Secrets), Deployment Strategies.",
     gradientFrom: "yellow-500",
     gradientTo: "orange-500",
+    videos: [
+      {
+        id: "SLB_c_ayRMo",
+        title: "Terraform Tutorial for Beginners",
+        description: "A complete introduction to Terraform for Infrastructure as Code with hands-on examples.",
+        category: "Terraform"
+      },
+      {
+        id: "YcJ9IeukJL8",
+        title: "HashiCorp Terraform Associate Certification Course",
+        description: "Comprehensive Terraform course covering all aspects required for certification.",
+        category: "Terraform"
+      },
+      {
+        id: "OXE2a8dqIAI",
+        title: "Infrastructure as Code - Crash Course",
+        description: "A comprehensive overview of IaC concepts, tools, and best practices.",
+        category: "IaC"
+      },
+      {
+        id: "m0a2CzgLNsc",
+        title: "Advanced CI/CD Pipeline Strategies",
+        description: "Learn advanced deployment techniques including blue/green and canary deployments.",
+        category: "CI/CD"
+      },
+      {
+        id: "eB0nUzAI7M8",
+        title: "Managing Secrets in CI/CD Pipelines",
+        description: "Best practices for securely managing secrets in CI/CD pipelines.",
+        category: "CI/CD"
+      }
+    ],
     details: `
       <ul class="list-disc pl-5 space-y-2">
           <li>
@@ -155,6 +291,44 @@ const phases: Phase[] = [
     focus: "Kubernetes (Concepts, kubectl, Objects), Helm, Managed K8s, Monitoring (Prometheus, Grafana), Logging (ELK/EFK).",
     gradientFrom: "red-500",
     gradientTo: "red-600",
+    videos: [
+      {
+        id: "X48VuDVgEkU",
+        title: "Kubernetes Tutorial for Beginners",
+        description: "A comprehensive introduction to Kubernetes concepts, architecture and practical examples.",
+        category: "Kubernetes"
+      },
+      {
+        id: "s_o8dwzRli0",
+        title: "Kubernetes Crash Course for Absolute Beginners",
+        description: "Quick introduction to Kubernetes for those new to container orchestration.",
+        category: "Kubernetes"
+      },
+      {
+        id: "QJ4fmCbVs8E",
+        title: "Helm Tutorial for Kubernetes",
+        description: "Learn how to use Helm for managing Kubernetes applications with packages.",
+        category: "Helm"
+      },
+      {
+        id: "h4Sl21JCiM8",
+        title: "Prometheus Monitoring Tutorial",
+        description: "Complete tutorial on setting up and using Prometheus for monitoring.",
+        category: "Monitoring"
+      },
+      {
+        id: "9TJx7QTrTyo",
+        title: "Grafana Tutorial",
+        description: "In-depth guide to creating dashboards and visualizing metrics with Grafana.",
+        category: "Monitoring"
+      },
+      {
+        id: "OM8iBPVNKJk",
+        title: "ELK Stack Tutorial",
+        description: "Learn how to set up the Elasticsearch, Logstash, and Kibana stack for logging.",
+        category: "Logging"
+      }
+    ],
     details: `
       <ul class="list-disc pl-5 space-y-2">
           <li>
@@ -192,6 +366,44 @@ const phases: Phase[] = [
     focus: "DevSecOps Principles, Security Tools, Advanced Topics (Service Mesh, GitOps), Practice, Certifications.",
     gradientFrom: "teal-500",
     gradientTo: "cyan-500",
+    videos: [
+      {
+        id: "nrhxNzf2Nqs",
+        title: "DevSecOps - What is it? How to implement it?",
+        description: "A comprehensive explanation of DevSecOps principles and implementation strategies.",
+        category: "DevSecOps"
+      },
+      {
+        id: "t7Nt2rXlNW4",
+        title: "Container Security Best Practices",
+        description: "Learn the best practices for securing containerized applications in production.",
+        category: "Security"
+      },
+      {
+        id: "O-mI3_4mGqM",
+        title: "Istio Service Mesh Explained",
+        description: "A deep dive into Istio service mesh architecture and capabilities.",
+        category: "Service Mesh"
+      },
+      {
+        id: "JtMQdpHr4Dw",
+        title: "GitOps with ArgoCD Tutorial",
+        description: "Learn how to implement GitOps workflows using ArgoCD for Kubernetes.",
+        category: "GitOps"
+      },
+      {
+        id: "YMdDRUswN9I",
+        title: "AWS Certified Solutions Architect - Full Course",
+        description: "Preparation course for the AWS Certified Solutions Architect certification.",
+        category: "Cloud Certification"
+      },
+      {
+        id: "K4-A-m8aCwQ",
+        title: "Certified Kubernetes Administrator (CKA) Course",
+        description: "Complete preparation for the CKA certification exam with hands-on practice.",
+        category: "Kubernetes Certification"
+      }
+    ],
     details: `
       <ul class="list-disc pl-5 space-y-2">
           <li>
