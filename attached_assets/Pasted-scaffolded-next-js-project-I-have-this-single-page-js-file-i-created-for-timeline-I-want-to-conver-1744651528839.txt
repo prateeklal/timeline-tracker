@@ -1,0 +1,391 @@
+scaffolded next.js project, I have this single page js file i created for timeline, I want to convert this file into components and more next.js style. Here's the file
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevOps Learning Path Timeline (Expandable)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Use Inter font */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Add a subtle gradient for visual appeal */
+        .phase-bar {
+           background-image: linear-gradient(to right, var(--tw-gradient-stops));
+           cursor: pointer; /* Indicate clickable items */
+        }
+        /* Modal styles */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black */
+            z-index: 40; /* Below modal, above content */
+            transition: opacity 0.3s ease-in-out; /* Smooth transition */
+        }
+        .modal-content {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 50; /* Above backdrop */
+            max-height: 80vh; /* Limit height and allow scrolling */
+            overflow-y: auto; /* Enable vertical scroll if content overflows */
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out; /* Smooth transition */
+        }
+        /* Hide initially - Using opacity and pointer-events for smoother transitions */
+        .hidden {
+            opacity: 0;
+            pointer-events: none; /* Prevent interaction when hidden */
+        }
+        .visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        /* Style links within modal */
+        .modal-link {
+            color: #2563eb; /* Blue-600 */
+            text-decoration: underline;
+            font-weight: 500;
+        }
+        .modal-link:hover {
+            color: #1d4ed8; /* Blue-700 */
+        }
+    </style>
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-4 md:p-8">
+    <div class="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow-lg relative">
+        <h1 class="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-8">DevOps, CI/CD & Cloud Learning Timeline</h1>
+        <p class="text-center text-gray-600 mb-8">Timeline starting from April 14, 2025, for a Senior Front-End Developer. Click on a phase for details.</p>
+
+        <div class="space-y-6">
+            <div class="phase-bar from-blue-500 to-blue-600 text-white p-4 rounded-lg shadow-md transition-transform duration-300 hover:scale-105" onclick="openModal(1)">
+                <h2 class="text-lg font-semibold mb-1">Phase 1: Foundations & Linux/Scripting</h2>
+                <p class="text-sm font-medium mb-2">Weeks 1-4 (Approx. Apr 14 - May 11, 2025)</p>
+                <p class="text-sm"><strong>Focus:</strong> DevOps Culture, Linux Fundamentals, Basic Networking, Bash/Python Scripting.</p>
+            </div>
+
+            <div class="phase-bar from-green-500 to-green-600 text-white p-4 rounded-lg shadow-md transition-transform duration-300 hover:scale-105" onclick="openModal(2)">
+                <h2 class="text-lg font-semibold mb-1">Phase 2: Git, Containers & CI/CD Basics</h2>
+                <p class="text-sm font-medium mb-2">Weeks 5-9 (Approx. May 12 - Jun 15, 2025)</p>
+                <p class="text-sm"><strong>Focus:</strong> Git Mastery, Docker (Dockerfile, Compose), CI/CD Concepts, Intro to GitHub Actions/GitLab CI/Jenkins.</p>
+            </div>
+
+            <div class="phase-bar from-purple-500 to-purple-600 text-white p-4 rounded-lg shadow-md transition-transform duration-300 hover:scale-105" onclick="openModal(3)">
+                <h2 class="text-lg font-semibold mb-1">Phase 3: Cloud Platform Fundamentals</h2>
+                <p class="text-sm font-medium mb-2">Weeks 10-15 (Approx. Jun 16 - Jul 27, 2025)</p>
+                <p class="text-sm"><strong>Focus:</strong> Choose AWS/Azure/GCP. Learn Core Concepts (IAM, Compute, Storage, Basic Networking, CDN, CloudWatch/Monitor).</p>
+            </div>
+
+            <div class="phase-bar from-yellow-500 to-orange-500 text-white p-4 rounded-lg shadow-md transition-transform duration-300 hover:scale-105" onclick="openModal(4)">
+                <h2 class="text-lg font-semibold mb-1">Phase 4: Infrastructure as Code (IaC) & Advanced CI/CD</h2>
+                <p class="text-sm font-medium mb-2">Weeks 16-20 (Approx. Jul 28 - Aug 31, 2025)</p>
+                <p class="text-sm"><strong>Focus:</strong> IaC Concepts, Terraform, Advanced Pipelines (Environments, Secrets), Deployment Strategies.</p>
+            </div>
+
+            <div class="phase-bar from-red-500 to-red-600 text-white p-4 rounded-lg shadow-md transition-transform duration-300 hover:scale-105" onclick="openModal(5)">
+                <h2 class="text-lg font-semibold mb-1">Phase 5: Container Orchestration & Monitoring</h2>
+                <p class="text-sm font-medium mb-2">Weeks 21-26 (Approx. Sep 1 - Oct 12, 2025)</p>
+                <p class="text-sm"><strong>Focus:</strong> Kubernetes (Concepts, kubectl, Objects), Helm, Managed K8s, Monitoring (Prometheus, Grafana), Logging (ELK/EFK).</p>
+            </div>
+
+             <div class="phase-bar from-teal-500 to-cyan-500 text-white p-4 rounded-lg shadow-md transition-transform duration-300 hover:scale-105" onclick="openModal(6)">
+                <h2 class="text-lg font-semibold mb-1">Phase 6: Security & Continuous Learning</h2>
+                <p class="text-sm font-medium mb-2">Weeks 27+ (Approx. Oct 13, 2025 - Ongoing)</p>
+                <p class="text-sm"><strong>Focus:</strong> DevSecOps Principles, Security Tools, Advanced Topics (Service Mesh, GitOps), Practice, Certifications.</p>
+            </div>
+        </div>
+         <p class="text-center text-gray-500 mt-8 text-xs">Note: Timelines are approximate and can be adjusted based on learning pace and depth.</p>
+    </div>
+
+    <div id="modal-backdrop" class="modal-backdrop hidden" onclick="closeModal()"></div>
+    <div id="modal" class="modal-content hidden bg-white p-6 rounded-lg shadow-xl w-11/12 md:w-3/4 lg:w-1/2">
+        <div class="flex justify-between items-center mb-4">
+            <h2 id="modal-title" class="text-xl font-bold text-gray-800">Phase Details</h2>
+            <button onclick="closeModal()" class="text-gray-500 hover:text-gray-800 text-2xl font-bold">&times;</button>
+        </div>
+        <div id="modal-body" class="text-gray-700 text-sm space-y-3">
+            </div>
+    </div>
+
+    <script>
+        // Data structure containing detailed information for each phase, including resource links
+        const phaseDetails = {
+             1: {
+                title: "Phase 1: Foundations & Linux/Scripting",
+                details: `
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li>
+                            <strong>DevOps Culture & Principles:</strong> Understand CAMS (Culture, Automation, Measurement, Sharing), goals (faster releases, reliability), relation to Agile/SRE.
+                            <div class="mt-1 pl-4">
+                                <span class="font-semibold">Resource:</span> <a href="https://www.splunk.com/en_us/blog/learn/devsecops-concepts-principles.html" target="_blank" rel="noopener noreferrer" class="modal-link">DevSecOps Principles (Splunk)</a><br>
+                                </div>
+                        </li>
+                        <li>
+                            <strong>Linux Fundamentals:</strong> Filesystem, Users/Permissions, Processes, Essential Commands (ls, cd, grep, find, chmod, ps, etc.), Package Management (apt/yum), Basic Networking Commands (ip, ping, curl), SSH.
+                            <div class="mt-1 pl-4">
+                                <span class="font-semibold">Resource:</span> <a href="https://www.tutorialspoint.com/unix/index.htm" target="_blank" rel="noopener noreferrer" class="modal-link">Linux/Unix Tutorial (Tutorialspoint)</a><br>
+                                <span class="font-semibold">Resource:</span> <a href="https://linuxjourney.com/" target="_blank" rel="noopener noreferrer" class="modal-link">Linux Journey</a><br>
+                                <span class="font-semibold">Video:</span> <a href="https://www.youtube.com/watch?v=sWbUDq4S6Y8" target="_blank" rel="noopener noreferrer" class="modal-link">Introduction to Linux – Full Course (YouTube)</a>
+                            </div>
+                        </li>
+                        <li>
+                            <strong>Basic Networking Concepts:</strong> IP Addresses (v4/v6), Subnets/CIDR, TCP/IP basics, HTTP/HTTPS, DNS resolution, Firewall concepts.
+                             <div class="mt-1 pl-4">
+                                <span class="font-semibold">Resource:</span> <a href="https://linuxjourney.com/" target="_blank" rel="noopener noreferrer" class="modal-link">Linux Journey (Networking Section)</a><br>
+                                </div>
+                        </li>
+                        <li>
+                            <strong>Scripting:</strong> Bash scripting (variables, loops, conditionals, functions) for automation, Python basics (syntax, file I/O, requests library - optional but recommended).
+                            <div class="mt-1 pl-4">
+                                <span class="font-semibold">Video (Bash):</span> <a href="https://www.youtube.com/watch?v=bz0ZCUv5rYo" target="_blank" rel="noopener noreferrer" class="modal-link">Linux Full Course (includes Bash - Edureka YouTube)</a><br>
+                                </div>
+                        </li>
+                    </ul>
+                `
+            },
+            2: {
+                title: "Phase 2: Git, Containers & CI/CD Basics",
+                details: `
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li><strong>Git Mastery:</strong> Branching Strategies (Gitflow, GitHub Flow), Merging vs. Rebasing, Conflict Resolution, Good Commit Messages.
+                            <div class="mt-1 pl-4">
+                                <span class="font-semibold">Resource:</span> Search for "Git branching strategies tutorial" or "Git documentation".
+                            </div>
+                        </li>
+                        <li><strong>Containerization (Docker):</strong> Concepts (vs. VMs), Docker Engine, Dockerfile (FROM, RUN, COPY, EXPOSE, CMD, Multi-stage builds), Image/Container Management (build, run, ps, rm), Docker Compose, Basic Docker Networking, Volumes, Container Registries (Docker Hub, ECR, etc.).
+                            <div class="mt-1 pl-4">
+                                <span class="font-semibold">Resource:</span> <a href="https://docs.docker.com/get-started/" target="_blank" rel="noopener noreferrer" class="modal-link">Docker Get Started Docs</a><br>
+                                <span class="font-semibold">Resource:</span> <a href="https://spacelift.io/blog/docker-tutorial" target="_blank" rel="noopener noreferrer" class="modal-link">Docker Tutorial (Spacelift)</a><br>
+                                <span class="font-semibold">Video:</span> <a href="https://www.youtube.com/watch?v=pTFZFxd4hOI" target="_blank" rel="noopener noreferrer" class="modal-link">Docker Tutorial for Beginners (YouTube)</a>
+                            </div>
+                        </li>
+                        <li><strong>CI/CD Concepts:</strong> Continuous Integration, Continuous Delivery, Continuous Deployment, Pipeline Stages (Checkout, Build, Test, Deploy), Artifacts.
+                            <div class="mt-1 pl-4">
+                                <span class="font-semibold">Resource:</span> Search for "CI/CD concepts explained" or "What is CI/CD".
+                            </div>
+                        </li>
+                        <li><strong>Intro to CI/CD Tools:</strong> Choose one (GitHub Actions, GitLab CI, Jenkins). Learn basic syntax (YAML), jobs/steps, triggers, environment variables, running build/test commands.
+                             <div class="mt-1 pl-4">
+                                <span class="font-semibold">Resource:</span> <a href="https://docs.github.com/en/actions" target="_blank" rel="noopener noreferrer" class="modal-link">GitHub Actions Documentation</a><br>
+                                <span class="font-semibold">Video:</span> Search for "GitHub Actions tutorial youtube".
+                            </div>
+                        </li>
+                    </ul>
+                `
+            },
+            3: {
+                title: "Phase 3: Cloud Platform Fundamentals (AWS Examples)",
+                details: `
+                    <ul class="list-disc pl-5 space-y-2">
+                         <li><strong>Core Cloud Concepts:</strong> IaaS/PaaS/SaaS, Regions/Availability Zones, Shared Responsibility Model.
+                            <div class="mt-1 pl-4">
+                                <span class="font-semibold">Resource:</span> <a href="https://aws.amazon.com/products/" target="_blank" rel="noopener noreferrer" class="modal-link">AWS Cloud Products Overview</a><br>
+                                <span class="font-semibold">Resource:</span> <a href="https://docs.aws.amazon.com/whitepapers/latest/aws-overview/amazon-web-services-cloud-platform.html" target="_blank" rel="noopener noreferrer" class="modal-link">AWS Services by Category (Whitepaper)</a>
+                             </div>
+                         </li>
+                        <li><strong>Identity & Access Management (IAM):</strong> Users, Groups, Roles, Policies, Least Privilege.
+                             <div class="mt-1 pl-4">
+                                <span class="font-semibold">Resource:</span> <a href="https://aws.amazon.com/iam/" target="_blank" rel="noopener noreferrer" class="modal-link">AWS IAM Documentation</a><br>
+                                <span class="font-semibold">Video:</span> Search for "AWS IAM tutorial youtube".
+                             </div>
+                        </li>
+                        <li><strong>Compute Services:</strong> Virtual Machines (EC2/VMs), Serverless (Lambda/Functions), Managed Containers (ECS/EKS Fargate/App Service).
+                             <div class="mt-1 pl-4">
+                                <span class="font-semibold">Resource (EC2):</span> <a href="https://aws.amazon.com/ec2/" target="_blank" rel="noopener noreferrer" class="modal-link">AWS EC2 Documentation</a><br>
+                                <span class="font-semibold">Resource (Lambda):</span> <a href="https://aws.amazon.com/lambda/" target="_blank" rel="noopener noreferrer" class="modal-link">AWS Lambda Documentation</a>
+                             </div>
+                        </li>
+                        <li><strong>Storage Services:</strong> Object Storage (S3/Blob Storage/Cloud Storage), Static Website Hosting.
+                             <div class="mt-1 pl-4">
+                                <span class="font-semibold">Resource (S3):</span> <a href="https://aws.amazon.com/s3/" target="_blank" rel="noopener noreferrer" class="modal-link">AWS S3 Documentation</a><br>
+                                <span class="font-semibold">Video:</span> Search for "AWS S3 static website hosting youtube".
+                             </div>
+                        </li>
+                        <li><strong>Networking Services:</strong> Virtual Networks (VPC/VNet), Subnets, Gateways, Security Groups/Firewalls, DNS (Route 53/Azure DNS), CDN (CloudFront/Azure CDN).
+                            <div class="mt-1 pl-4">
+                                <span class="font-semibold">Resource (VPC):</span> <a href="https://aws.amazon.com/vpc/" target="_blank" rel="noopener noreferrer" class="modal-link">AWS VPC Documentation</a><br>
+                                <span class="font-semibold">Resource (CloudFront):</span> <a href="https://aws.amazon.com/cloudfront/" target="_blank" rel="noopener noreferrer" class="modal-link">AWS CloudFront Documentation</a>
+                             </div>
+                        </li>
+                        <li><strong>Cloud Monitoring:</strong> Metrics, Logs, Alarms (CloudWatch/Azure Monitor/Google Cloud Monitoring).
+                             <div class="mt-1 pl-4">
+                                <span class="font-semibold">Resource (CloudWatch):</span> <a href="https://aws.amazon.com/cloudwatch/" target="_blank" rel="noopener noreferrer" class="modal-link">AWS CloudWatch Documentation</a><br>
+                                <span class="font-semibold">Video:</span> Search for "AWS CloudWatch tutorial youtube".
+                             </div>
+                        </li>
+                    </ul>
+                `
+            },
+            4: {
+                title: "Phase 4: Infrastructure as Code (IaC) & Advanced CI/CD",
+                details: `
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li><strong>Infrastructure as Code (IaC):</strong> Benefits (Consistency, Repeatability, Version Control), Declarative vs. Imperative.
+                             <div class="mt-1 pl-4">
+                                <span class="font-semibold">Resource:</span> <a href="https://www.ibm.com/think/topics/infrastructure-as-code" target="_blank" rel="noopener noreferrer" class="modal-link">What is IaC? (IBM)</a><br>
+                                <span class="font-semibold">Resource:</span> <a href="https://spacelift.io/blog/infrastructure-as-code" target="_blank" rel="noopener noreferrer" class="modal-link">IaC Guide (Spacelift)</a>
+                             </div>
+                        </li>
+                        <li><strong>Terraform:</strong> HCL Syntax, Providers, Resources, Data Sources, Variables, Outputs, State Management, Workflow (init, plan, apply, destroy), Managing Secrets.
+                             <div class="mt-1 pl-4">
+                                <span class="font-semibold">Resource:</span> <a href="https://developer.hashicorp.com/terraform/tutorials" target="_blank" rel="noopener noreferrer" class="modal-link">Terraform Tutorials (HashiCorp)</a><br>
+                                <span class="font-semibold">Video:</span> <a href="https://www.youtube.com/watch?v=EtEb40LE5zQ" target="_blank" rel="noopener noreferrer" class="modal-link">Infrastructure as Code Crash Course (YouTube)</a> </div>
+                        </li>
+                        <li><strong>Cloud-Specific IaC (Awareness):</strong> AWS CloudFormation, Azure Resource Manager (ARM)/Bicep, Google Cloud Deployment Manager.</li>
+                        <li><strong>Advanced CI/CD Pipelines:</strong> Managing Environments (dev, staging, prod), Secure Secret Management in CI/CD, Building/Pushing Docker Images, Cloud Deployments (scripting, CLI, integrations), Deployment Strategies (Blue/Green, Canary).
+                             <div class="mt-1 pl-4">
+                                <span class="font-semibold">Resource:</span> Search for "CI/CD deployment strategies explained".<br>
+                                <span class="font-semibold">Video:</span> Search for "Blue green deployment youtube" or "Canary release tutorial".
+                             </div>
+                        </li>
+                    </ul>
+                `
+            },
+            5: {
+                title: "Phase 5: Container Orchestration & Monitoring",
+                details: `
+                     <ul class="list-disc pl-5 space-y-2">
+                        <li><strong>Kubernetes (K8s):</strong> Purpose (Scale, HA, Self-healing), Architecture (Control Plane, Nodes), Core Objects (Pods, Services, Deployments, ReplicaSets, Namespaces, ConfigMaps, Secrets), \`kubectl\` CLI.
+                             <div class="mt-1 pl-4">
+                                <span class="font-semibold">Resource:</span> <a href="https://kubernetes.io/docs/tutorials/" target="_blank" rel="noopener noreferrer" class="modal-link">Kubernetes Tutorials (Official Docs)</a><br>
+                                <span class="font-semibold">Resource:</span> <a href="https://spacelift.io/blog/kubernetes-tutorial" target="_blank" rel="noopener noreferrer" class="modal-link">Kubernetes Tutorial (Spacelift)</a><br>
+                                <span class="font-semibold">Video:</span> <a href="https://m.youtube.com/watch?v=X48VuDVv0do&t=7212s" target="_blank" rel="noopener noreferrer" class="modal-link">Kubernetes Tutorial for Beginners (4 Hours YouTube)</a><br>
+                                <span class="font-semibold">Video:</span> <a href="https://www.youtube.com/watch?v=s_o8dwzRlu4" target="_blank" rel="noopener noreferrer" class="modal-link">Kubernetes Crash Course (YouTube)</a>
+                             </div>
+                        </li>
+                        <li><strong>K8s Networking:</strong> Services (ClusterIP, NodePort, LoadBalancer), Ingress Controllers.</li>
+                        <li><strong>Helm:</strong> Package manager for Kubernetes.
+                             <div class="mt-1 pl-4">
+                                <span class="font-semibold">Resource:</span> <a href="https://helm.sh/docs/intro/quickstart/" target="_blank" rel="noopener noreferrer" class="modal-link">Helm Quickstart Guide</a>
+                             </div>
+                         </li>
+                        <li><strong>Managed Kubernetes:</strong> AWS EKS, Azure AKS, Google GKE.</li>
+                        <li><strong>Monitoring Tools:</strong> Prometheus (Metrics collection), Grafana (Visualization).
+                             <div class="mt-1 pl-4">
+                                <span class="font-semibold">Resource:</span> <a href="https://prometheus.io/docs/introduction/overview/" target="_blank" rel="noopener noreferrer" class="modal-link">Prometheus Overview</a><br>
+                                <span class="font-semibold">Resource:</span> <a href="https://grafana.com/docs/grafana/latest/introduction/" target="_blank" rel="noopener noreferrer" class="modal-link">Grafana Introduction</a><br>
+                                <span class="font-semibold">Video:</span> Search for "Prometheus Grafana tutorial youtube".
+                             </div>
+                        </li>
+                        <li><strong>Logging Tools:</strong> ELK Stack (Elasticsearch, Logstash, Kibana) or EFK Stack (Elasticsearch, Fluentd, Kibana).
+                             <div class="mt-1 pl-4">
+                                <span class="font-semibold">Resource:</span> <a href="https://www.elastic.co/what-is/elk-stack" target="_blank" rel="noopener noreferrer" class="modal-link">What is the ELK Stack? (Elastic)</a>
+                             </div>
+                        </li>
+                        <li><strong>Alerting:</strong> Setting up alerts based on metrics/logs.</li>
+                    </ul>
+                `
+            },
+             6: {
+                title: "Phase 6: Security & Continuous Learning",
+                details: `
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li><strong>DevSecOps Principles:</strong> Shifting security left, integrating security into the lifecycle.
+                             <div class="mt-1 pl-4">
+                                <span class="font-semibold">Resource:</span> <a href="https://anchore.com/devsecops/7-principles-of-devsecops-automation/" target="_blank" rel="noopener noreferrer" class="modal-link">7 Principles of DevSecOps Automation (Anchore)</a><br>
+                                <span class="font-semibold">Resource:</span> <a href="https://www.xmatters.com/blog/the-principles-of-devsecops" target="_blank" rel="noopener noreferrer" class="modal-link">The Principles of DevSecOps (xMatters)</a><br>
+                                <span class="font-semibold">Video:</span> Search for "DevSecOps tutorial youtube".
+                             </div>
+                        </li>
+                        <li><strong>Security Tools & Practices:</strong> Secrets Management (Vault, Cloud KMS), Dependency Scanning (npm audit, Snyk), Static Application Security Testing (SAST), Dynamic Application Security Testing (DAST), Container Image Scanning, Infrastructure Security Best Practices.
+                             <div class="mt-1 pl-4">
+                                <span class="font-semibold">Resource:</span> Search for "Container security scanning tools" or "SAST vs DAST explained".
+                             </div>
+                        </li>
+                        <li><strong>Advanced Topics (Explore based on interest):</strong> Service Mesh (Istio, Linkerd), GitOps (Argo CD, Flux), Serverless Frameworks, Chaos Engineering, FinOps (Cloud Cost Management).</li>
+                        <li><strong>Continuous Learning:</strong> Practice through projects, contribute to Open Source, pursue Cloud/DevOps Certifications, stay updated with blogs/conferences.</li>
+                    </ul>
+                `
+            }
+        };
+
+        // Declare variables for modal elements in a scope accessible by functions
+        let modal = null;
+        let modalBackdrop = null;
+        let modalTitle = null;
+        let modalBody = null;
+
+        // Wait for the DOM to be fully loaded before getting elements
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Get modal elements once the DOM is ready
+            modal = document.getElementById('modal');
+            modalBackdrop = document.getElementById('modal-backdrop');
+            modalTitle = document.getElementById('modal-title');
+            modalBody = document.getElementById('modal-body');
+
+             // Add event listener for Escape key only after DOM is loaded
+            document.addEventListener('keydown', function(event) {
+                // Check if modal exists and is not hidden
+                if (event.key === "Escape" && modal && !modal.classList.contains('hidden')) {
+                    closeModal();
+                }
+            });
+        });
+
+
+        /**
+         * Opens the modal and populates it with details for the given phase ID.
+         * @param {number} phaseId - The ID of the phase (1-6).
+         */
+        function openModal(phaseId) {
+            // Ensure modal elements have been found (DOM is ready)
+            if (!modal || !modalBackdrop || !modalTitle || !modalBody) {
+                console.error("Modal elements not found. DOM might not be ready yet.");
+                return;
+            }
+
+            const data = phaseDetails[phaseId];
+            if (data) {
+                modalTitle.textContent = data.title;
+                modalBody.innerHTML = data.details; // Use innerHTML because details contain HTML tags
+                // Use visible/hidden classes for opacity transition
+                modal.classList.remove('hidden');
+                modalBackdrop.classList.remove('hidden');
+                // Force reflow to ensure transition plays
+                void modal.offsetWidth;
+                modal.classList.add('visible');
+                modalBackdrop.classList.add('visible');
+                // Scroll modal body to top
+                modalBody.scrollTop = 0;
+
+
+            } else {
+                console.error("Phase details not found for ID:", phaseId);
+            }
+        }
+
+        /**
+         * Closes the modal.
+         */
+        function closeModal() {
+             // Ensure modal elements have been found
+            if (!modal || !modalBackdrop) {
+                console.error("Modal elements not found.");
+                return;
+            }
+            // Use visible/hidden classes for opacity transition
+            modal.classList.remove('visible');
+            modalBackdrop.classList.remove('visible');
+            modal.classList.add('hidden');
+            modalBackdrop.classList.add('hidden');
+        }
+
+    </script>
+</body>
+</html>
+
+
+Also before the change, I notice I have not added youtube references or resources for all instead "Search for ...". try adding links to all.
+
+Also I need the youtube videos embedded with viewer there to directly dive into the video.
+
+Remove the generic scaffolded code
