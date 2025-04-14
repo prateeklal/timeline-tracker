@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from '@/components/ui/modal';
 import { Phase, VideoResource } from '@/data/phases';
-import { Calendar, Target, ExternalLink, Youtube, Play, Bookmark } from 'lucide-react';
+import { Calendar, Target, ExternalLink, Youtube, Play, Bookmark, Loader } from 'lucide-react';
 import YouTubeEmbed from '@/components/ui/youtube-embed';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useQuery } from '@tanstack/react-query';
+import { fetchVideosByPhaseId } from '@/lib/api';
 
 interface PhaseModalProps {
   isOpen: boolean;
@@ -14,9 +16,25 @@ interface PhaseModalProps {
 const PhaseModal: React.FC<PhaseModalProps> = ({ isOpen, onClose, phase }) => {
   if (!phase) return null;
   
-  const [activeVideo, setActiveVideo] = useState<VideoResource | null>(
-    phase.videos && phase.videos.length > 0 ? phase.videos[0] : null
-  );
+  // Fetch videos for this phase from the API
+  const {
+    data: videos = [],
+    isLoading: isLoadingVideos,
+    isError: isVideosError
+  } = useQuery({
+    queryKey: ['/api/phases', phase.id, 'videos'],
+    queryFn: () => fetchVideosByPhaseId(phase.id),
+    enabled: !!phase?.id && isOpen,
+  });
+  
+  const [activeVideo, setActiveVideo] = useState<VideoResource | null>(null);
+  
+  // Update active video when videos are loaded
+  useEffect(() => {
+    if (videos && videos.length > 0) {
+      setActiveVideo(videos[0]);
+    }
+  }, [videos]);
 
   // Create a sanitization function for links
   const sanitizeHTML = (html: string) => {
@@ -74,13 +92,22 @@ const PhaseModal: React.FC<PhaseModalProps> = ({ isOpen, onClose, phase }) => {
         </TabsContent>
         
         <TabsContent value="videos" className="pt-4">
-          {phase.videos && phase.videos.length > 0 ? (
+          {isLoadingVideos ? (
+            <div className="flex flex-col items-center justify-center py-12">
+              <Loader size={32} className="animate-spin text-primary mb-4" />
+              <p className="text-muted-foreground">Loading video tutorials...</p>
+            </div>
+          ) : isVideosError ? (
+            <div className="p-4 text-center text-red-500">
+              Error loading videos. Please try again later.
+            </div>
+          ) : videos && videos.length > 0 ? (
             <div className="space-y-4">
               {/* Video player */}
               <div className="mb-4">
                 {activeVideo && (
                   <YouTubeEmbed 
-                    videoId={activeVideo.id} 
+                    videoId={activeVideo.videoId} 
                     title={activeVideo.title} 
                   />
                 )}
@@ -104,7 +131,7 @@ const PhaseModal: React.FC<PhaseModalProps> = ({ isOpen, onClose, phase }) => {
                   <span>Available Video Tutorials</span>
                 </h3>
                 <div className="space-y-2 max-h-[250px] overflow-y-auto pr-2">
-                  {phase.videos.map(video => (
+                  {videos.map(video => (
                     <button
                       key={video.id}
                       onClick={() => setActiveVideo(video)}
